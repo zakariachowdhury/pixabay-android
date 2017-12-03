@@ -14,5 +14,5 @@ import static com.zakariachowdhury.pixabay.Constatns.Pixabay.PIXABAY_API_PATH;
 
 public interface PixabayService {
     @GET(PIXABAY_API_PATH + "&image_type=photo")
-    Call<ImageSearch> imageSearch( @Query("keywords") String keywords );
+    Call<ImageSearch> imageSearch( @Query("q") String keywords );
 }

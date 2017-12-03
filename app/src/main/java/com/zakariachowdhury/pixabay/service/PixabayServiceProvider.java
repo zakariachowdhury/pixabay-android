@@ -2,7 +2,8 @@ package com.zakariachowdhury.pixabay.service;
 
 import android.util.Log;
 
-import com.zakariachowdhury.pixabay.EventManager;
+import com.zakariachowdhury.pixabay.event.ErrorEvent;
+import com.zakariachowdhury.pixabay.event.EventManager;
 import com.zakariachowdhury.pixabay.MainActivity;
 import com.zakariachowdhury.pixabay.model.ImageSearch;
 
@@ -53,7 +54,7 @@ public class PixabayServiceProvider {
     }
 
     public void imageSearch(String keywords) {
-        Call<ImageSearch> call = pixabayService.imageSearch("yellow+flower");
+        Call<ImageSearch> call = pixabayService.imageSearch(keywords);
         call.enqueue(new Callback<ImageSearch>() {
             @Override
             public void onResponse(Call<ImageSearch> call, Response<ImageSearch> response) {
@@ -64,16 +65,16 @@ public class PixabayServiceProvider {
                 }
                 else {
                     try {
-                        Log.e(TAG, response.errorBody().string());
+                        eventManager.postErrorEvent(new ErrorEvent(response.errorBody().string()));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                       eventManager.postErrorEvent(new ErrorEvent(e.getMessage()));
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ImageSearch> call, Throwable t) {
-                Log.e(TAG, "Unable to perform image search");
+                eventManager.postErrorEvent(new ErrorEvent("Unable to perform image search"));
             }
         });
     }

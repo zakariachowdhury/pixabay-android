@@ -3,7 +3,10 @@ package com.zakariachowdhury.pixabay;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.zakariachowdhury.pixabay.event.ErrorEvent;
+import com.zakariachowdhury.pixabay.event.EventManager;
 import com.zakariachowdhury.pixabay.model.ImageSearch;
 import com.zakariachowdhury.pixabay.service.PixabayServiceProvider;
 
@@ -22,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         eventManager = EventManager.getInstance();
         pixabayServiceProvider = PixabayServiceProvider.getInstance();
-        pixabayServiceProvider.imageSearch("Yellow+Flowers");
+        pixabayServiceProvider.imageSearch("Red+Flowers");
     }
 
     @Override
@@ -39,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onImageSearchResult(ImageSearch imageSearch) {
-        Log.v(TAG, "Total Hits = " + String.valueOf(imageSearch.getTotal()));
+        Toast.makeText(this, "Total Hits = " + String.valueOf(imageSearch.getTotal()), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorEvent(ErrorEvent errorEvent) {
+        Toast.makeText(this, errorEvent.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

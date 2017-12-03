@@ -1,4 +1,4 @@
-package com.zakariachowdhury.pixabay;
+package com.zakariachowdhury.pixabay.event;
 
 import android.content.Context;
 
@@ -37,5 +37,9 @@ public class EventManager {
 
     public void postImageSearchResult(ImageSearch imageSearch) {
         eventBus.post(imageSearch);
+    }
+
+    public void postErrorEvent(ErrorEvent errorEvent) {
+        eventBus.post(errorEvent);
     }
 }
