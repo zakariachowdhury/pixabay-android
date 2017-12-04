@@ -1,6 +1,6 @@
 package com.zakariachowdhury.pixabay.service;
 
-import com.zakariachowdhury.pixabay.model.ImageSearch;
+import com.zakariachowdhury.pixabay.model.PixabayResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,8 +14,8 @@ import static com.zakariachowdhury.pixabay.Constatns.Pixabay.PIXABAY_API_PATH;
 
 public interface PixabayService {
     @GET(PIXABAY_API_PATH)
-    Call<ImageSearch> imageSearch( @Query("q") String keywords );
+    Call<PixabayResponse> imageSearch(@Query("q") String keywords );
 
     @GET(PIXABAY_API_PATH + "&editors_choice=true")
-    Call<ImageSearch> editorsChoice();
+    Call<PixabayResponse> editorsChoice();
 }

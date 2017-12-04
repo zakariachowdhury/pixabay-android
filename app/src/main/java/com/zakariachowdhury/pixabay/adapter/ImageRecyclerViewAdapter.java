@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 import com.zakariachowdhury.pixabay.R;
 import com.zakariachowdhury.pixabay.model.Image;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,9 +25,9 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     private List<Image> imageList;
     private Context context;
 
-    public ImageRecyclerViewAdapter(Context context, List<Image> imageList) {
+    public ImageRecyclerViewAdapter(Context context) {
         this.context = context;
-        this.imageList = imageList;
+        this.imageList = new ArrayList<>();
     }
 
     @Override
@@ -50,6 +51,18 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     @Override
     public int getItemCount() {
         return imageList != null ? imageList.size() : 0;
+    }
+
+    public void clear() {
+        if (imageList.size() > 0) {
+            imageList.clear();
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addAll(List<Image> imageList) {
+        this.imageList.addAll(imageList);
+        notifyDataSetChanged();
     }
 
     protected static class CustomViewHolder extends RecyclerView.ViewHolder {

@@ -2,7 +2,7 @@ package com.zakariachowdhury.pixabay.event;
 
 import android.content.Context;
 
-import com.zakariachowdhury.pixabay.model.ImageSearch;
+import com.zakariachowdhury.pixabay.model.PixabayResponse;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -35,8 +35,8 @@ public class EventManager {
         eventBus.unregister(context);
     }
 
-    public void postImageSearchResult(ImageSearch imageSearch) {
-        eventBus.post(imageSearch);
+    public void postImageSearchResult(PixabayResponse pixabayResponse) {
+        eventBus.post(pixabayResponse);
     }
 
     public void postErrorEvent(ErrorEvent errorEvent) {

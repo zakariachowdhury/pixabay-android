@@ -1,11 +1,9 @@
 package com.zakariachowdhury.pixabay.service;
 
-import android.util.Log;
-
 import com.zakariachowdhury.pixabay.event.ErrorEvent;
 import com.zakariachowdhury.pixabay.event.EventManager;
 import com.zakariachowdhury.pixabay.MainActivity;
-import com.zakariachowdhury.pixabay.model.ImageSearch;
+import com.zakariachowdhury.pixabay.model.PixabayResponse;
 
 import java.io.IOException;
 
@@ -54,22 +52,22 @@ public class PixabayServiceProvider {
     }
 
     public void imageSearch(String keywords) {
-        Call<ImageSearch> call = pixabayService.imageSearch(keywords);
+        Call<PixabayResponse> call = pixabayService.imageSearch(keywords);
         call.enqueue(imageSearchCallback);
     }
 
     public void editorsChoice() {
-        Call<ImageSearch> call = pixabayService.editorsChoice();
+        Call<PixabayResponse> call = pixabayService.editorsChoice();
         call.enqueue(imageSearchCallback);
     }
 
-    private Callback imageSearchCallback = new Callback<ImageSearch>() {
+    private Callback imageSearchCallback = new Callback<PixabayResponse>() {
         @Override
-        public void onResponse(Call<ImageSearch> call, Response<ImageSearch> response) {
+        public void onResponse(Call<PixabayResponse> call, Response<PixabayResponse> response) {
             int statusCode = response.code();
             if(statusCode == 200) {
-                ImageSearch imageSearch = response.body();
-                eventManager.postImageSearchResult(imageSearch);
+                PixabayResponse pixabayResponse = response.body();
+                eventManager.postImageSearchResult(pixabayResponse);
             }
             else {
                 try {
@@ -81,7 +79,7 @@ public class PixabayServiceProvider {
         }
 
         @Override
-        public void onFailure(Call<ImageSearch> call, Throwable t) {
+        public void onFailure(Call<PixabayResponse> call, Throwable t) {
             eventManager.postErrorEvent(new ErrorEvent("Unable to perform image search"));
         }
     };
