@@ -2,11 +2,16 @@ package com.zakariachowdhury.pixabay;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.zakariachowdhury.pixabay.adapter.ImageRecyclerViewAdapter;
 import com.zakariachowdhury.pixabay.event.ErrorEvent;
 import com.zakariachowdhury.pixabay.event.EventManager;
 import com.zakariachowdhury.pixabay.model.Image;
@@ -27,14 +32,18 @@ public class MainActivity extends AppCompatActivity {
     private PixabayServiceProvider pixabayServiceProvider;
     private EventManager eventManager;
 
-    @BindView(R.id.imageView)
-    ImageView imageView;
+    @BindView(R.id.recycler_view)
+    RecyclerView imageRecyclerView;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        imageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         eventManager = EventManager.getInstance();
         pixabayServiceProvider = PixabayServiceProvider.getInstance();
@@ -57,13 +66,16 @@ public class MainActivity extends AppCompatActivity {
     public void onImageSearchResult(ImageSearch imageSearch) {
         Toast.makeText(this, "Total Images = " + String.valueOf(imageSearch.getImages().size()), Toast.LENGTH_SHORT).show();
         if (imageSearch.getImages().size() > 0) {
-            List<Image> images = imageSearch.getImages();
-            Picasso.with(this).load(images.get(0).getWebformatURL()).into(imageView);
+            ImageRecyclerViewAdapter adapter = new ImageRecyclerViewAdapter(this, imageSearch.getImages());
+            imageRecyclerView.setAdapter(adapter);
         }
+
+        progressBar.setVisibility(View.GONE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onErrorEvent(ErrorEvent errorEvent) {
         Toast.makeText(this, errorEvent.getMessage(), Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.GONE);
     }
 }
