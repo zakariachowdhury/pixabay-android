@@ -55,27 +55,34 @@ public class PixabayServiceProvider {
 
     public void imageSearch(String keywords) {
         Call<ImageSearch> call = pixabayService.imageSearch(keywords);
-        call.enqueue(new Callback<ImageSearch>() {
-            @Override
-            public void onResponse(Call<ImageSearch> call, Response<ImageSearch> response) {
-                int statusCode = response.code();
-                if(statusCode == 200) {
-                    ImageSearch imageSearch = response.body();
-                    eventManager.postImageSearchResult(imageSearch);
-                }
-                else {
-                    try {
-                        eventManager.postErrorEvent(new ErrorEvent(response.errorBody().string()));
-                    } catch (IOException e) {
-                       eventManager.postErrorEvent(new ErrorEvent(e.getMessage()));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ImageSearch> call, Throwable t) {
-                eventManager.postErrorEvent(new ErrorEvent("Unable to perform image search"));
-            }
-        });
+        call.enqueue(imageSearchCallback);
     }
+
+    public void editorsChoice() {
+        Call<ImageSearch> call = pixabayService.editorsChoice();
+        call.enqueue(imageSearchCallback);
+    }
+
+    private Callback imageSearchCallback = new Callback<ImageSearch>() {
+        @Override
+        public void onResponse(Call<ImageSearch> call, Response<ImageSearch> response) {
+            int statusCode = response.code();
+            if(statusCode == 200) {
+                ImageSearch imageSearch = response.body();
+                eventManager.postImageSearchResult(imageSearch);
+            }
+            else {
+                try {
+                    eventManager.postErrorEvent(new ErrorEvent(response.errorBody().string()));
+                } catch (IOException e) {
+                    eventManager.postErrorEvent(new ErrorEvent(e.getMessage()));
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ImageSearch> call, Throwable t) {
+            eventManager.postErrorEvent(new ErrorEvent("Unable to perform image search"));
+        }
+    };
 }

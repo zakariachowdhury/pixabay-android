@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
         eventManager = EventManager.getInstance();
         pixabayServiceProvider = PixabayServiceProvider.getInstance();
-        pixabayServiceProvider.imageSearch("Red+Flowers");
+        //pixabayServiceProvider.imageSearch("Red+Flowers");
+        pixabayServiceProvider.editorsChoice();
     }
 
     @Override
@@ -64,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onImageSearchResult(ImageSearch imageSearch) {
-        Toast.makeText(this, "Total Images = " + String.valueOf(imageSearch.getImages().size()), Toast.LENGTH_SHORT).show();
         if (imageSearch.getImages().size() > 0) {
             ImageRecyclerViewAdapter adapter = new ImageRecyclerViewAdapter(this, imageSearch.getImages());
             imageRecyclerView.setAdapter(adapter);
+        } else {
+            Toast.makeText(this, "No images available", Toast.LENGTH_SHORT).show();
         }
 
         progressBar.setVisibility(View.GONE);
