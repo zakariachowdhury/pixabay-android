@@ -1,5 +1,6 @@
-package com.zakariachowdhury.pixabay;
+package com.zakariachowdhury.pixabay.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +10,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.zakariachowdhury.pixabay.R;
 import com.zakariachowdhury.pixabay.adapter.ImageRecyclerViewAdapter;
 import com.zakariachowdhury.pixabay.event.ErrorEvent;
 import com.zakariachowdhury.pixabay.event.EventManager;
+import com.zakariachowdhury.pixabay.event.ImageDetailsEvent;
 import com.zakariachowdhury.pixabay.model.PixabayResponse;
 import com.zakariachowdhury.pixabay.service.PixabayServiceProvider;
 
@@ -21,7 +24,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private PixabayServiceProvider pixabayServiceProvider;
     private EventManager eventManager;
     private ImageRecyclerViewAdapter recyclerViewAdapter;
@@ -39,13 +42,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
+        ButterKnife.bind(this);
         eventManager = EventManager.getInstance();
         pixabayServiceProvider = PixabayServiceProvider.getInstance();
         pixabayServiceProvider.editorsChoice();
 
-        recyclerViewAdapter = new ImageRecyclerViewAdapter(this);
+        recyclerViewAdapter = new ImageRecyclerViewAdapter(this, eventManager);
         imageRecyclerView.setAdapter(recyclerViewAdapter);
         imageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -54,18 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 pixabayServiceProvider.editorsChoice();
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        eventManager.start(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        eventManager.stop();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -86,5 +77,11 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, errorEvent.getMessage(), Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onImageDetailsEvent(ImageDetailsEvent imageDetailsEvent) {
+        Intent intent = new Intent(this, ImageActivity.class);
+        startActivity(intent);
     }
 }

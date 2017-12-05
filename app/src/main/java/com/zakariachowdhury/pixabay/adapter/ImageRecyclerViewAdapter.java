@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.zakariachowdhury.pixabay.R;
+import com.zakariachowdhury.pixabay.event.EventManager;
+import com.zakariachowdhury.pixabay.event.ImageDetailsEvent;
 import com.zakariachowdhury.pixabay.model.Image;
 
 import java.util.ArrayList;
@@ -22,12 +24,14 @@ import butterknife.ButterKnife;
  */
 
 public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecyclerViewAdapter.CustomViewHolder> {
+    private final EventManager eventManager;
     private List<Image> imageList;
     private Context context;
 
-    public ImageRecyclerViewAdapter(Context context) {
+    public ImageRecyclerViewAdapter(Context context, EventManager eventManager) {
         this.context = context;
         this.imageList = new ArrayList<>();
+        this.eventManager = eventManager;
     }
 
     @Override
@@ -65,13 +69,22 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         notifyDataSetChanged();
     }
 
-    protected static class CustomViewHolder extends RecyclerView.ViewHolder {
+    public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.imageView)
         ImageView imageView;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Image image = imageList.get(position);
+            ImageDetailsEvent imageDetailsEvent = new ImageDetailsEvent(image);
+            eventManager.postImageDetailsEvent(imageDetailsEvent);
         }
     }
 }

@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-import static com.zakariachowdhury.pixabay.Constatns.Pixabay.PIXABAY_API_PATH;
+import static com.zakariachowdhury.pixabay.util.Constatns.Pixabay.PIXABAY_API_PATH;
 
 /**
  * Created by Zakaria Chowdhury on 6/26/17.

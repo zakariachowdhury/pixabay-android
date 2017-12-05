@@ -2,7 +2,7 @@ package com.zakariachowdhury.pixabay.service;
 
 import com.zakariachowdhury.pixabay.event.ErrorEvent;
 import com.zakariachowdhury.pixabay.event.EventManager;
-import com.zakariachowdhury.pixabay.MainActivity;
+import com.zakariachowdhury.pixabay.ui.MainActivity;
 import com.zakariachowdhury.pixabay.model.PixabayResponse;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.zakariachowdhury.pixabay.Constatns.Pixabay.PIXABAY_BASE_URL;
+import static com.zakariachowdhury.pixabay.util.Constatns.Pixabay.PIXABAY_BASE_URL;
 
 /**
  * Created by Zakaria Chowdhury on 6/26/17.

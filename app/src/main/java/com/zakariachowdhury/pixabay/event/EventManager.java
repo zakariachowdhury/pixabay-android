@@ -2,6 +2,7 @@ package com.zakariachowdhury.pixabay.event;
 
 import android.content.Context;
 
+import com.zakariachowdhury.pixabay.model.Image;
 import com.zakariachowdhury.pixabay.model.PixabayResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,5 +42,13 @@ public class EventManager {
 
     public void postErrorEvent(ErrorEvent errorEvent) {
         eventBus.post(errorEvent);
+    }
+
+    public void postImageDetailsEvent(ImageDetailsEvent imageDetailsEvent) {
+        eventBus.postSticky(imageDetailsEvent);
+    }
+
+    public void clearImageDetailsEvent() {
+        eventBus.removeStickyEvent(ImageDetailsEvent.class);
     }
 }

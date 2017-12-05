@@ -1,4 +1,4 @@
-package com.zakariachowdhury.pixabay;
+package com.zakariachowdhury.pixabay.util;
 
 /**
  * Created by Zakaria Chowdhury on 6/30/17.
